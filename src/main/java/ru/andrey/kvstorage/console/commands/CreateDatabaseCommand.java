@@ -10,8 +10,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public final class CreateDatabaseCommand implements DatabaseCommand {
-    public static final String LINE = "CREATE_DATABASE";
-
     private final ExecutionEnvironment environment;
     private final String databaseName;
 

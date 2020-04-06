@@ -12,8 +12,6 @@ import java.nio.file.Paths;
 import java.util.Optional;
 
 public final class ReadKeyCommand implements DatabaseCommand {
-    public static final String LINE = "READ_KEY";
-
     private final ExecutionEnvironment environment;
     private final String databaseName;
     private final String tableName;

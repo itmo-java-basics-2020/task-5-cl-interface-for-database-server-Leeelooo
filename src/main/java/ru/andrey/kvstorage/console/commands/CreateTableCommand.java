@@ -12,8 +12,6 @@ import java.nio.file.Paths;
 import java.util.Optional;
 
 public final class CreateTableCommand implements DatabaseCommand {
-    public static final String LINE = "CREATE_TABLE";
-
     private final ExecutionEnvironment environment;
     private final String databaseName;
     private final String tableName;

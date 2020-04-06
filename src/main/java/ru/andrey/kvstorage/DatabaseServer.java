@@ -1,7 +1,6 @@
 package ru.andrey.kvstorage;
 
 import ru.andrey.kvstorage.console.DatabaseCommandResult;
-import ru.andrey.kvstorage.console.DefaultExecutionEnvironment;
 import ru.andrey.kvstorage.console.ExecutionEnvironment;
 import ru.andrey.kvstorage.console.commands.DatabaseCommands;
 
@@ -18,6 +17,6 @@ public class DatabaseServer {
     }
 
     DatabaseCommandResult executeNextCommand(String commandText) {
-        return DatabaseCommands.getCommand(env, commandText).execute();
+        return DatabaseCommands.of(env, commandText).execute();
     }
 }

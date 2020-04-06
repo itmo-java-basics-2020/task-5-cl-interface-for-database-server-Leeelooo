@@ -2,45 +2,99 @@ package ru.andrey.kvstorage.console.commands;
 
 import ru.andrey.kvstorage.console.DatabaseCommand;
 import ru.andrey.kvstorage.console.ExecutionEnvironment;
+import ru.andrey.kvstorage.utils.StringUtils;
 
-public final class DatabaseCommands {
+import java.util.stream.Stream;
 
-    public static DatabaseCommand getCommand(
+public enum DatabaseCommands {
+    CREATE_DATABASE() {
+        @Override
+        public DatabaseCommand getCommand(ExecutionEnvironment environment, String... options) {
+            return isOptionsCountCorrect(options.length)
+                    ? new CreateDatabaseCommand(environment, options[1])
+                    : new InvalidCommand();
+        }
+
+        @Override
+        public int getOptionsCount() {
+            return 2;
+        }
+    },
+    CREATE_TABLE() {
+        @Override
+        public DatabaseCommand getCommand(ExecutionEnvironment environment, String... options) {
+            return isOptionsCountCorrect(options.length)
+                    ? new CreateTableCommand(environment, options[1], options[2])
+                    : new InvalidCommand();
+        }
+
+        @Override
+        public int getOptionsCount() {
+            return 3;
+        }
+    },
+    READ_KEY() {
+        @Override
+        public DatabaseCommand getCommand(ExecutionEnvironment environment, String... options) {
+            return isOptionsCountCorrect(options.length)
+                    ? new ReadKeyCommand(environment, options[1], options[2], options[3])
+                    : new InvalidCommand();
+        }
+
+        @Override
+        protected int getOptionsCount() {
+            return 4;
+        }
+    },
+    UPDATE_KEY() {
+        @Override
+        public DatabaseCommand getCommand(ExecutionEnvironment environment, String... options) {
+            return isOptionsCountCorrect(options.length)
+                    ? new UpdateKeyCommand(environment, options[1], options[2], options[3], options[4])
+                    : new InvalidCommand();
+        }
+
+        @Override
+        protected int getOptionsCount() {
+            return 5;
+        }
+    },
+    INVALID_INPUT() {
+        @Override
+        public DatabaseCommand getCommand(ExecutionEnvironment environment, String... options) {
+            return new InvalidCommand();
+        }
+
+        @Override
+        protected int getOptionsCount() {
+            return 0;
+        }
+    };
+
+    public static DatabaseCommand of(
             ExecutionEnvironment environment,
-            String commandText
+            String input
     ) {
-        if (commandText == null) {
-            return new InvalidCommand();
+        if (StringUtils.isEmptyOrNull(input)) {
+            return INVALID_INPUT.getCommand(environment, input);
         }
-        var options = commandText.split(" ");
-        if (options.length == 0) {
-            return new InvalidCommand();
+        var options = input.split(" ");
+        if (Stream.of(DatabaseCommands.values())
+                .noneMatch(s -> s.name().equals(options[0]))) {
+            return INVALID_INPUT.getCommand(environment, input);
         }
+        return DatabaseCommands.valueOf(options[0]).getCommand(environment, options);
+    }
 
-        switch (options[0]) {
-            case CreateDatabaseCommand.LINE:
-                if (options.length != 2) {
-                    return new InvalidCommand();
-                }
-                return new CreateDatabaseCommand(environment, options[1]);
-            case  CreateTableCommand.LINE:
-                if (options.length != 3) {
-                    return new InvalidCommand();
-                }
-                return new CreateTableCommand(environment, options[1], options[2]);
-            case ReadKeyCommand.LINE:
-                if (options.length != 4) {
-                    return new InvalidCommand();
-                }
-                return new ReadKeyCommand(environment, options[1], options[2], options[3]);
-            case UpdateKeyCommand.LINE:
-                if (options.length != 5) {
-                    return new InvalidCommand();
-                }
-                return new UpdateKeyCommand(environment, options[1], options[2], options[3], options[4]);
-            default:
-                return new InvalidCommand();
-        }
+    public abstract DatabaseCommand getCommand(
+            ExecutionEnvironment environment,
+            String... options
+    );
+
+    protected abstract int getOptionsCount();
+
+    protected boolean isOptionsCountCorrect(int optionsCount) {
+        return getOptionsCount() == optionsCount;
     }
 
 }
