@@ -50,7 +50,8 @@ public final class UpdateKeyCommand implements DatabaseCommand {
         if (database.isPresent()) {
             try {
                 database.get().write(tableName, objectKey, objectValue);
-                return DatabaseCommandResult.success(null);
+                return DatabaseCommandResult.success(String.format("Key %s updated in table %s " +
+                        "in database %s to value %s", objectKey, tableName, databaseName, objectValue));
             } catch (DatabaseException e) {
                 return DatabaseCommandResult.error(e.getMessage());
             }

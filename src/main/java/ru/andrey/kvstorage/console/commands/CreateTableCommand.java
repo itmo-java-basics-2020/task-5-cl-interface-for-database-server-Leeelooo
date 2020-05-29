@@ -47,7 +47,7 @@ public final class CreateTableCommand implements DatabaseCommand {
             return DatabaseCommandResult.error("Couldn't create database " +
                     "object for database name " + databaseName + ".");
         }
-        return DatabaseCommandResult.success(null);
+        return DatabaseCommandResult.success(String.format("Table %s created in database %s", tableName, databaseName));
     }
 
 }

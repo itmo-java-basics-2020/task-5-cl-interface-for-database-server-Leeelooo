@@ -32,7 +32,7 @@ public final class CreateDatabaseCommand implements DatabaseCommand {
             return DatabaseCommandResult.error(e.getMessage());
         }
 
-        return DatabaseCommandResult.success(null);
+        return DatabaseCommandResult.success(String.format("Database %s created", databaseName));
     }
 
 }

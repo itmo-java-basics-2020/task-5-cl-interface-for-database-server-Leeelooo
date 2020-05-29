@@ -30,7 +30,7 @@ public interface DatabaseCommandResult {
 final class DatabaseCommandResultImpl implements DatabaseCommandResult {
     private final String result;
     private final String errorMessage;
-    private final DatabaseCommandResult.DatabaseCommandStatus status;
+    private final DatabaseCommandStatus status;
 
     public DatabaseCommandResultImpl(String result, String errorMessage, DatabaseCommandResult.DatabaseCommandStatus status) {
         this.result = result;
@@ -50,7 +50,7 @@ final class DatabaseCommandResultImpl implements DatabaseCommandResult {
 
     @Override
     public boolean isSuccess() {
-        return status.equals(DatabaseCommandStatus.SUCCESS);
+        return status == DatabaseCommandStatus.SUCCESS;
     }
 
     @Override
